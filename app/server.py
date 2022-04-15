@@ -23,15 +23,16 @@ def server(app:FastAPI):
         return templates.TemplateResponse("index.html", {"request": request})
     @app.get("/api/upload")
     def upload_files(file:UploadFile = File(...)):
-        mkdir(f"uploads/{str(uuid4())}")
-        with open(f"uploads/{str(uuid4())}/{file.filename}", "wb") as f:
+        id=str(uuid4())
+        mkdir(f"uploads/{id}")
+        with open(f"uploads/{id}/{file.filename}", "wb") as f:
             try:
                 copyfileobj(file.file, f)
             except:
                 return {"error": "File upload failed"}
             finally:
                 file.file.close()
-        file_url = "https://smartpro.solutions/drive/" + str(uuid4()) + "/" + file.filename
+        file_url = "https://smartpro.solutions/drive/" + id + "/" + file.filename
         file_name = file.filename
         file_size = file.size
         file_type = file.content_type
