@@ -21,7 +21,7 @@ def server(app:FastAPI):
     @app.get("/")
     def index(request:Request):
         return templates.TemplateResponse("index.html", {"request": request})
-    @app.get("/api/upload")
+    @app.post("/upload")
     def upload_files(file:UploadFile = File(...)):
         id=str(uuid4())
         mkdir(f"uploads/{id}")
@@ -37,7 +37,7 @@ def server(app:FastAPI):
         file_size = file.size
         file_type = file.content_type
         return {"url": file_url, "name": file_name, "size": file_size, "type": file_type}
-    @app.get("/api/download")
+    @app.get("/download")
     def download_files(url:str):
         try:
             file_name = url.split("/")[-1]
@@ -48,7 +48,7 @@ def server(app:FastAPI):
         except: 
             print(Exception)
             return {"error": "File download failed"}
-    @app.get("/api/delete")
+    @app.delete("/delete")
     def delete_files(url:str):
         try:
             file_path = "uploads/" + "/".join(url.split("/")[3:])
@@ -61,7 +61,7 @@ def server(app:FastAPI):
         except: 
             print(Exception)
             return {"error": "File deletion failed"}
-    @app.get("/api/list")
+    @app.get("/list")
     def list_files(url:str):
         try:
             file_path = "uploads/" + "/".join(url.split("/")[3:])
@@ -74,7 +74,7 @@ def server(app:FastAPI):
         except: 
             print(Exception)
             return {"error": "File deletion failed"}
-    @app.get("/api/rename")
+    @app.post("/rename")
     def rename_files(url:str, new_name:str):
         try:
             file_path = "uploads/" + "/".join(url.split("/")[3:])
