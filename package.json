@@ -1,0 +1,12 @@
+{
+  "name": "server",
+  "version": "0.0.1",
+  "description": "FastAPI",
+  "main": "manage.py",
+  "repository": "https://github.com/oscarbahamonde/smartcloud.git",
+  "author": "oscarbahamonde",
+  "license": "MIT",
+  "scripts": {
+    "dev":"uvicorn app:app --reload --host 0.0.0.0 --port 80"
+  }
+}

@@ -32,11 +32,10 @@ def server(app:FastAPI):
                 return {"error": "File upload failed"}
             finally:
                 file.file.close()
-        file_url = "https://smartpro.solutions/drive/" + id + "/" + file.filename
+        file_url = "http://localhost/drive/" + id + "/" + file.filename
         file_name = file.filename
-        file_size = file.size
         file_type = file.content_type
-        return {"url": file_url, "name": file_name, "size": file_size, "type": file_type}
+        return {"url": file_url, "name": file_name, "type": file_type}
     @app.get("/download")
     def download_files(url:str):
         try:
