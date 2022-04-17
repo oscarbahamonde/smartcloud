@@ -5,5 +5,4 @@ from .models import db
 
 app = FastAPI()
 db()
-server(app)
-router(app)
+router(server(app))
