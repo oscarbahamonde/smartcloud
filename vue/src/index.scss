@@ -1,0 +1,18 @@
+@import url('tailwindcss/tailwind.css');
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Oxygen+Mono&family=Playfair+Display:ital@1&family=Special+Elite&family=Ubuntu&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.font-serif {
+  font-family: 'Playfair Display', serif;
+}
+.font-sans{
+  font-family: 'Lato', sans-serif;
+}
+.font-mono{
+    font-family: 'Oxygen Mono', monospace;
+}
+.font-script{
+    font-family: 'Special Elite', cursive;
+}

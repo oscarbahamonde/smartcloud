@@ -1,16 +1,16 @@
 version: "3.8"
 
 services:
-  app:
-    build: .
-    env_file:
-      - .env
+  db:
+    image: postgres:latest
     ports:
-      - "8000:8000"
-
-
-  database:
-    image: postgres:12
-    env_file:
-      - .env
-      
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+      - POSTGRES_URL=postgresql://postgres:postgres@localhost:5432/postgres
+    volumes:
+      - ./.docker/data/postgres:/var/lib/postgresql/data
+    networks:
+      - default

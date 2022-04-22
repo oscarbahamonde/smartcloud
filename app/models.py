@@ -1,14 +1,26 @@
-from sqlmodel import SQLModel, create_engine, Field
-from sqlalchemy.orm import sessionmaker
+from sqlmodel import SQLModel, Field
 from pydantic import EmailStr
 from uuid import UUID, uuid4
 from datetime import datetime
-from os import getenv
-from dotenv import load_dotenv
 from typing import Optional
-load_dotenv()
+import os
+import dotenv
+from sqlmodel import create_engine, SQLModel, Session
 
-DB_URL = getenv("DB_URL")
+dotenv.load_dotenv()
+
+DATABASE_URL = os.getenv("DB_URL")
+
+engine = create_engine(DATABASE_URL)
+
+
+def init_db():
+    SQLModel.metadata.create_all(engine)
+
+
+def get_session():
+    with Session(engine) as session:
+        yield session
 
 class User(SQLModel):
     displayName:str = Field(...)
@@ -16,23 +28,6 @@ class User(SQLModel):
     photoURL:Optional[str]=Field()
     email:EmailStr = Field(...)
     
-class Users(User, table=True):
-    id:UUID = Field(default_factory=uuid4, primary_key=True)
-    created_at:datetime = Field(default_factory=datetime.utcnow)
-    updated_at:datetime = Field(default_factory=datetime.utcnow)
-    
-class MediaFile(SQLModel):
-    name:str=Field(...)
-    typeof:str=Field(...)
-    url:str=Field(...)
-    s_id:str=Field(...)
-
-class MediaFileModel(SQLModel):
-    id:UUID = Field(default_factory=uuid4, primary_key=True)
-    created_at:datetime = Field(default_factory=datetime.utcnow)
-    updated_at:datetime = Field(default_factory=datetime.utcnow)
-    uid:UUID=Field(..., foreign_key=Users.id)
-
 class Product(SQLModel):
     name:str=Field(...)
     price:float=Field(...)
@@ -41,18 +36,10 @@ class Product(SQLModel):
     s_id:str=Field(...)
     photoURL:Optional[str]=Field()
     
+class Users(User, table=True):
+    id:UUID = Field(default_factory=uuid4, primary_key=True)
+    created_at:datetime = Field(default_factory=datetime.now)
+
 class Products(Product, table=True):
     id:UUID = Field(default_factory=uuid4, primary_key=True)
-    created_at:datetime = Field(default_factory=datetime.utcnow)
-    updated_at:datetime = Field(default_factory=datetime.utcnow)
-
-
-SQLModel.metadata.create_all(bind=create_engine(DB_URL))
-  
-def db():
-    sessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=create_engine(DB_URL))
-    session = sessionLocal()
-    try:
-        yield session
-    finally:
-        session.close()
+    created_at:datetime = Field(default_factory=datetime.now)

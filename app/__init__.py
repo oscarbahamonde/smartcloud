@@ -1,8 +1,6 @@
-from fastapi import FastAPI
+from .main import app
 from .server import server
-from .routers import router
-from .models import db
+from .router import router
 
-app = FastAPI()
-db()
-router(server(app))
+
+server(app)
